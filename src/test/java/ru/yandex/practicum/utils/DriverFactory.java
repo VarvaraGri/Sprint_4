@@ -4,6 +4,7 @@ import org.junit.rules.ExternalResource;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import ru.yandex.practicum.pages.utils.EnvConfig;
 
 import java.time.Duration;
 
@@ -24,13 +25,13 @@ public class DriverFactory extends ExternalResource {
 
     private void startChrome() {
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(EnvConfig.IMPLICITY_TIME));
         driver.manage().window().maximize();
     }
 
     private void startFirefox() {
         driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(EnvConfig.IMPLICITY_TIME));
         driver.manage().window().maximize();
     }
 

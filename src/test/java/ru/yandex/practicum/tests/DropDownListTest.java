@@ -23,7 +23,7 @@ public class DropDownListTest {
         this.expectedAnswer = expectedAnswer;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2} {3} {4} {5} {6} {7}")
     public static Object[][] getParametersForFAQ(){
         return new Object[][] {
                 {0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},

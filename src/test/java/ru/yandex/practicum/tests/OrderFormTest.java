@@ -6,15 +6,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.practicum.pages.MainPage;
-import ru.yandex.practicum.pages.OrderPage1;
-import ru.yandex.practicum.pages.OrderPage2;
+import ru.yandex.practicum.pages.FirstOrderPage;
+import ru.yandex.practicum.pages.SecondOrderPage;
 import ru.yandex.practicum.utils.DriverFactory;
 
 
 @RunWith(Parameterized.class)
 public class OrderFormTest {
-    private final String orderButton;
-    private final String scrollTo;
+    private final int scrollTo;
     private final String textForNameField;
     private final String textForSurnameField;
     private final String textForAddressField;
@@ -28,8 +27,7 @@ public class OrderFormTest {
     @Rule
     public DriverFactory factory = new DriverFactory();
 
-    public OrderFormTest(String orderButton, String scrollTo, String textForNameField, String textForSurnameField, String textForAddressField, String textForMetroStationField, String textForPhoneNumberField, String textForDateField, int durationOption, String colorId, String textForCommentField) {
-        this.orderButton = orderButton;
+    public OrderFormTest(int scrollTo, String textForNameField, String textForSurnameField, String textForAddressField, String textForMetroStationField, String textForPhoneNumberField, String textForDateField, int durationOption, String colorId, String textForCommentField) {
         this.scrollTo = scrollTo;
         this.textForNameField = textForNameField;
         this.textForSurnameField = textForSurnameField;
@@ -43,11 +41,11 @@ public class OrderFormTest {
 
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1}")
     public static Object[][] getParametersForFAQ(){
         return new Object[][] {
-            {"button.Button_Button__ra12g", "Header_Header__214zg", "Иван", "Иванов", "г. Москва", "Бульвар Рокосовского", "87776665544", "10.09.2030", 0, "black", "Жду"},
-            {"button.Button_Button__ra12g", "Home_FinishButton__1_cWm", "Джон", "Константин", "Лос Анжелес", "Лубянка", "12223334455", "20.11.2027", 3, "grey", "Боюсь, не дождусь"},
+            {0, "Иван", "Иванов", "г. Москва", "Бульвар Рокосовского", "87776665544", "10.09.2030", 0, "black", "Жду"},
+            {1, "Джон", "Константин", "Лос Анжелес", "Лубянка", "12223334455", "20.11.2027", 3, "grey", "Боюсь, не дождусь"},
         };
     }
 
@@ -57,20 +55,20 @@ public class OrderFormTest {
         var mainPage = new MainPage(driver);
         mainPage.openMainPage();
         mainPage.closeCookie();
-        OrderPage1 orderPage1 = mainPage.clickOnOrderButton(scrollTo, orderButton);
-        orderPage1.fillTheNameField(textForNameField);
-        orderPage1.fillTheSurnameField(textForSurnameField);
-        orderPage1.fillTheAddressField(textForAddressField);
-        orderPage1.fillTheMetroStationField(textForMetroStationField);
-        orderPage1.fillThePhoneNumberField(textForPhoneNumberField);
-        OrderPage2 orderPage2 = orderPage1.clickOnNextButton();
-        orderPage2.fillTheDateField(textForDateField);
-        orderPage2.fillTheDurationField(durationOption);
-        orderPage2.chooseTheColorCheckbox(colorId);
-        orderPage2.fillTheCommentField(textForCommentField);
-        orderPage2.clickOnOtherOrderButton();
-        orderPage2.clickOnYesButton();
-        orderPage2.checkIfTheOrderIsCreated();
+        FirstOrderPage firstOrderPage = mainPage.clickOnOrderButton(scrollTo);
+        firstOrderPage.fillTheNameField(textForNameField);
+        firstOrderPage.fillTheSurnameField(textForSurnameField);
+        firstOrderPage.fillTheAddressField(textForAddressField);
+        firstOrderPage.fillTheMetroStationField(textForMetroStationField);
+        firstOrderPage.fillThePhoneNumberField(textForPhoneNumberField);
+        SecondOrderPage secondOrderPage = firstOrderPage.clickOnNextButton();
+        secondOrderPage.fillTheDateField(textForDateField);
+        secondOrderPage.fillTheDurationField(durationOption);
+        secondOrderPage.chooseTheColorCheckbox(colorId);
+        secondOrderPage.fillTheCommentField(textForCommentField);
+        secondOrderPage.clickOnOtherOrderButton();
+        secondOrderPage.clickOnYesButton();
+        secondOrderPage.checkIfTheOrderIsCreated();
     }
 
 }

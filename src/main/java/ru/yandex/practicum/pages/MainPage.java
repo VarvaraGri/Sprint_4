@@ -7,12 +7,20 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.practicum.pages.utils.EnvConfig;
 
 import java.time.Duration;
 import java.util.List;
 
 public class MainPage {
     private final WebDriver driver;
+
+    private final By questionButton = By.cssSelector(".accordion__button");
+    private final By FAQSection = By.xpath("//div[contains(text(), 'Вопросы о важном')]");
+    private final By cookieCloseButton = By.className("App_CookieButton__3cvqF");
+    private final By scrollToTopOrderButton = By.className("Header_Header__214zg");
+    private final By scrollToBottomOrderButton = By.className("Home_FinishButton__1_cWm");
+    private final By orderButton = By.cssSelector("button.Button_Button__ra12g");
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -28,27 +36,32 @@ public class MainPage {
     }
 
     public void clickOnQuestionButton(int questionNumber) {
-        List<WebElement> dropdownButtons = driver.findElements(By.cssSelector(".accordion__button"));
+        List<WebElement> dropdownButtons = driver.findElements(questionButton);
         dropdownButtons.get(questionNumber).click();
     }
 
     public void scroll() {
-        WebElement questionsSection = driver.findElement(By.xpath("//div[contains(text(), 'Вопросы о важном')]"));
+        WebElement questionsSection = driver.findElement(FAQSection);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", questionsSection);
     }
 
     public void closeCookie() {
-        driver.findElement(By.className("App_CookieButton__3cvqF")).click();
+        driver.findElement(cookieCloseButton).click();
     }
 
     public void openMainPage() {
-        driver.get("https://qa-scooter.praktikum-services.ru/");
+        driver.get(EnvConfig.BASE_URL);
     }
 
-    public OrderPage1 clickOnOrderButton(String scrollTo, String orderButton) {
-        WebElement orderSection = driver.findElement(By.className(scrollTo));
+    public FirstOrderPage clickOnOrderButton(int scrollTo) {
+        WebElement orderSection;
+        if (scrollTo == 0) {
+            orderSection = driver.findElement(scrollToTopOrderButton);
+        } else {
+            orderSection = driver.findElement(scrollToBottomOrderButton);
+        }
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", orderSection);
-        driver.findElement(By.cssSelector(orderButton)).click();
-        return new OrderPage1(driver);
+        driver.findElement(orderButton).click();
+        return new FirstOrderPage(driver);
     }
 }
